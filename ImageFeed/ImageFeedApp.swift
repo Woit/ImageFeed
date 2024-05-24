@@ -15,7 +15,7 @@ struct ImageFeedApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListView()
         }
     }
 }
