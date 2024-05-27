@@ -8,28 +8,44 @@ struct ListView: View {
 
     var body: some View {
         List(viewModel.pictures) { picture in
-            KFImage(URL(string: picture.src.tiny))
-                .resizable()
-                .placeholder {
-                    ProgressView()
-                }
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
-                // .clipped()
-                .cornerRadius(20)
-                .padding(.horizontal, 10)
-                .shadow(radius: 10)
-                .onTapGesture {
-                    withAnimation {
-                        selectedPicture = picture
+            ZStack {
+                KFImage(URL(string: picture.src.tiny))
+                    .resizable()
+                    .placeholder {
+                        ProgressView()
+                    }
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 10)
+                    .shadow(radius: 10)
+                    .onTapGesture {
+                        withAnimation {
+                            selectedPicture = picture
+                        }
+                    }
+                    .onAppear {
+                        if self.viewModel.pictures.isLast(picture) {
+                            page += 1
+                            viewModel.fetchPictures(page: page)
+                        }
+                    }
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Text(picture.photographer)
+                            .font(.system(size: 15))
+                            .foregroundColor(.white)
+                            .padding(4)
+                            .background(Color.black.opacity(0.5))
+                            .cornerRadius(10)
+                            .padding(.top)
+                            .padding(.leading)
                     }
                 }
-                .onAppear {
-                    if self.viewModel.pictures.isLast(picture) {
-                        page += 1
-                        viewModel.fetchPictures(page: page)
-                    }
-                }
+            }
+            .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
         .onAppear {
