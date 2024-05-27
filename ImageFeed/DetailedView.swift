@@ -4,25 +4,18 @@ import SwiftUI
 
 struct DetailView: View {
     @Binding var picture: Picture?
-    let animation: Namespace.ID
 
     var body: some View {
-        ZStack {
-            Color.black
-                .ignoresSafeArea()
-            VStack {
-                KFImage(URL(string: picture?.src.large ?? ""))
-                    .resizable()
-                    .placeholder {
-                        ProgressView()
-                    }
-                    .aspectRatio(contentMode: .fit)
-                    .matchedGeometryEffect(id: picture?.id, in: animation)
+        KFImage(URL(string: picture?.src.large ?? ""))
+            .resizable()
+            .placeholder {
+                ProgressView()
             }
-            .edgesIgnoringSafeArea(.all)
-        }
-        .onTapGesture {
-            picture = nil
-        }
+            .aspectRatio(contentMode: .fit)
+            .onTapGesture {
+                withAnimation {
+                    picture = nil
+                }
+            }
     }
 }
