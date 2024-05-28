@@ -10,6 +10,11 @@ class PictureViewModel: ObservableObject {
         guard let url = URL(string: "https://api.pexels.com/v1/curated/?page=\(page)&per_page=\(Config.picturesPerPage)") else {
             return
         }
+        if page == 1, !pictures.isEmpty {
+            withAnimation {
+                pictures = Array(pictures.prefix(upTo: Config.picturesPerPage))
+            }
+        }
         var request = URLRequest(url: url)
         request.addValue(Config.apiKey, forHTTPHeaderField: "Authorization")
 
@@ -30,6 +35,7 @@ class PictureViewModel: ObservableObject {
                 },
                 receiveValue: { [weak self] pictures in
                     self?.pictures += pictures
+                    // _ = pictures.map { print($0.id) }
                 }
             )
             .store(in: &cancellables)

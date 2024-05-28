@@ -61,6 +61,10 @@ struct ListView: View {
                 }
             }
         )
+        .refreshable {
+            page = 1
+            viewModel.fetchPictures(page: page)
+        }
     }
 }
 
